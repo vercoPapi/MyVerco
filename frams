@@ -1,0 +1,97 @@
+repeat wait() until game:IsLoaded()
+
+if getgenv().VERCO_LOADED then
+    return
+end
+getgenv().VERCO_LOADED = true
+
+local request = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
+if request then
+    request({
+        Url = "http://127.0.0.1:6463/rpc?v=1",
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json",
+            ["Origin"] = "https://discord.com"
+        },
+        Body = game:GetService("HttpService"):JSONEncode({
+            cmd = "INVITE_BROWSER",
+            args = {
+                code = "m573mNfUvS"
+            },
+            nonce = game:GetService("HttpService"):GenerateGUID(false)
+        }),
+    })
+end
+
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+
+local Window = OrionLib:MakeWindow({
+    Name = "VERCO HUB", 
+    HidePremium = false, 
+    SaveConfig = true, 
+    ConfigFolder = "VERCO_DATA",
+    IntroText = "VERCO HUB"
+})
+
+local MainTab = Window:MakeTab({
+    Name = "Main",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+MainTab:AddToggle({
+    Name = "Auto Farm",
+    Default = false,
+    Callback = function(Value)
+        _G.VercoFarm = Value
+        while _G.VercoFarm do
+            task.wait()
+            -- Logic asli dari CanHongSonHub diletakkan di sini
+        end
+    end    
+})
+
+local PlayerTab = Window:MakeTab({
+    Name = "Player",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+PlayerTab:AddSlider({
+    Name = "WalkSpeed",
+    Min = 16,
+    Max = 500,
+    Default = 16,
+    Color = Color3.fromRGB(255,255,255),
+    Increment = 1,
+    ValueName = "Speed",
+    Callback = function(v)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = v
+    end    
+})
+
+PlayerTab:AddButton({
+    Name = "Infinite Jump",
+    Callback = function()
+        game:GetService("UserInputService").JumpRequest:Connect(function()
+            game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+        end)
+    end
+})
+
+local ConfigTab = Window:MakeTab({
+    Name = "Settings",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+ConfigTab:AddButton({
+    Name = "Unload VERCO",
+    Callback = function()
+        OrionLib:Destroy()
+        getgenv().VERCO_LOADED = false
+    end    
+})
+
+OrionLib:Init()

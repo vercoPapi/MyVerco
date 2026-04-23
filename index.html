@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Akses</title>
+    <style>
+        /* Base Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Orbitron', sans-serif; /* Jika ingin font lebih futuristik */
+        }
+
+        body {
+            background: radial-gradient(circle, #1a0033 0%, #05000a 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        /* Container Utama */
+        .login-card {
+            background: rgba(15, 0, 30, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #8a2be2;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.6), inset 0 0 15px rgba(75, 0, 130, 0.5);
+            width: 380px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            color: #bc13fe;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px #bc13fe;
+            font-size: 24px;
+        }
+
+        /* Input Style */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #8a2be2;
+            border-radius: 8px;
+            color: #fff;
+            outline: none;
+            transition: 0.3s;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus {
+            box-shadow: 0 0 20px #bc13fe;
+            border-color: #bc13fe;
+        }
+
+        /* Tombol Login */
+        .btn-login {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #4b0082, #8a2be2);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.4s;
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            box-shadow: 0 0 30px #bc13fe;
+            transform: scale(1.02);
+            cursor: pointer;
+        }
+
+        /* Slot Iklan */
+        .ads-box {
+            margin-top: 30px;
+            padding: 15px;
+            border: 1px dashed #bc13fe;
+            background: rgba(188, 19, 254, 0.05);
+            border-radius: 10px;
+        }
+
+        .ads-box p {
+            font-size: 10px;
+            color: #888;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .ads-box a {
+            color: #00ffcc; /* Warna kontras agar iklan terlihat */
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .ads-box a:hover {
+            text-shadow: 0 0 10px #00ffcc;
+        }
+
+        /* Link Cari */
+        .search-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #8a2be2;
+            font-size: 13px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .search-link:hover {
+            color: #fff;
+            text-shadow: 0 0 5px #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <h2>Verifikasi</h2>
+        
+        <form action="https://papiverco.my.id">
+            <div class="input-group">
+                <input type="text" placeholder="MASUKKAN ID" required>
+            </div>
+            
+            <a href="https://papiverco.my.id" class="btn-login">Login</a>
+        </form>
+
+        <a href="https://papiverco.my.id" class="search-link">Cari ID Saya →</a>
+
+        <div class="ads-box">
+            <p>Sponsorship</p>
+            <a href="https://papiverco.my.id" target="_blank">Klaim Bonus ID Baru Klik Di Sini!</a>
+        </div>
+    </div>
+
+</body>
+</html>

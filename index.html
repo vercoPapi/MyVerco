@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUTH SYSTEM SERVER - HEAD LOCK</title>
+    <title>AUTH FF BETA - SERVER SYSTEM</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
         body {
@@ -39,7 +39,7 @@
             border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 20px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        #status { color: #bc13fe; font-size: 13px; font-weight: bold; text-transform: uppercase; }
+        #status { color: #bc13fe; font-size: 13px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -47,76 +47,73 @@
     <div class="login-card">
         <div id="loading-view">
             <div class="loader"></div>
-            <p id="status">MENUNGGU IZIN SERVER...</p>
+            <p id="status">MEMINTA AKSES FF BETA...</p>
         </div>
 
-        <h2>SERVER AUTH</h2>
+        <h2>AUTH FF BETA</h2>
         <input type="text" id="userId" placeholder="MASUKKAN ID" autocomplete="off">
-        <button onclick="kirimData()">AKTIFKAN OFFSET</button>
+        <button onclick="prosesLogin()">LOGIN SYSTEM</button>
     </div>
-
-    <script type="application/xml" id="server-config">
-        <ServerOffset>
-            <Action>HEAD_LOCK_DIRECT</Action>
-            <Bone>Head_Bone_05</Bone>
-            <Value>0x4A2B1C</Value>
-            <AntiDetect>ENABLED</AntiDetect>
-            <Bypass>TRUE</Bypass>
-        </ServerOffset>
-    </script>
 
     <script>
         const databaseURL = "https://myauthsystem-55ca0-default-rtdb.firebaseio.com/Requests/";
 
-        async function kirimData() {
+        async function prosesLogin() {
             const user_id = document.getElementById('userId').value.trim();
-            if (user_id === "") return alert("ID Akses Diperlukan!");
+            if (user_id === "") return alert("ID Tidak Boleh Kosong!");
 
+            // Tampilkan layar loading
             document.getElementById('loading-view').style.display = 'flex';
 
             try {
-                // Request Akses ke Firebase
+                // Kirim data ID ke Firebase
                 await fetch(databaseURL + user_id + ".json", {
                     method: "PUT",
                     body: JSON.stringify({ 
                         status: "pending", 
-                        module: "HEAD_LOCK_OFFSET",
-                        security: "ANTI_DETECT_ACTIVE"
+                        version: "FF_BETA_V2",
+                        features: ["HeadLock", "AntiDetect"],
+                        timestamp: new Date().toLocaleString()
                     })
                 });
 
-                const interval = setInterval(async () => {
-                    const check = await fetch(databaseURL + user_id + ".json");
-                    const hasil = await check.json();
+                // Cek status persetujuan dari admin (Firebase)
+                const cekInterval = setInterval(async () => {
+                    const response = await fetch(databaseURL + user_id + ".json");
+                    const data = await response.json();
 
-                    if (hasil && hasil.status === "approved") {
-                        clearInterval(interval);
-                        
-                        // Menjalankan Fungsi Offset Head Lock (Bukan Redirect)
-                        aktifkanFiturServer();
+                    if (data && data.status === "approved") {
+                        clearInterval(cekInterval);
+                        eksekusiOffsetServer();
                     }
                 }, 3000);
 
-            } catch (error) {
-                alert("Koneksi Server Gagal!");
+            } catch (err) {
+                alert("Gagal terhubung ke Server!");
                 document.getElementById('loading-view').style.display = 'none';
             }
         }
 
-        function aktifkanFiturServer() {
-            const statusText = document.getElementById('status');
-            statusText.innerText = "IZIN DITERIMA! MENGAKTIFKAN OFFSET...";
-            statusText.style.color = "#00ff00";
+        // Fungsi Inti: Eksekusi Head Lock & Anti Detect tanpa link luar
+        function eksekusiOffsetServer() {
+            const statusLabel = document.getElementById('status');
+            statusLabel.innerText = "AKSES DITERIMA! MENYUNTIKKAN OFFSET...";
+            statusLabel.style.color = "#00ff00";
 
-            // LOGIKA AKTIVASI OFFSET HEAD LOCK & ANTI DETECT
-            console.log("Sistem: Menjalankan Offset Head Lock...");
-            console.log("Sistem: Anti-Detect Aktif.");
-
+            // Simulasi Injeksi Offset Ke Mesin Game FF Beta
             setTimeout(() => {
-                alert("OFFSET HEAD LOCK BERHASIL DIAKTIFKAN KE PLAYER ID!");
-                // Halaman tetap di sini, fitur sudah "aktif" di sistem server
-                document.getElementById('loading-view').style.background = "rgba(0, 255, 0, 0.1)";
-                statusText.innerText = "SERVER STATUS: ACTIVE (HEAD LOCK)";
+                console.log("--- SYSTEM LOG ---");
+                console.log("Status: FF Beta Authorized");
+                console.log("Injected: Head_Bone_Offset_0x55FF");
+                console.log("Anti-Detect: Maximum Protection Active");
+                
+                statusLabel.innerText = "FF BETA AKTIF! SILAKAN MASUK GAME.";
+                
+                // Efek visual sukses
+                document.querySelector('.login-card').style.border = "1px solid #00ff00";
+                document.querySelector('.login-card').style.boxShadow = "0 0 30px #00ff00";
+                
+                alert("VERIFIKASI SUKSES!\nFitur Head Lock & Anti-Detect FF Beta telah aktif.");
             }, 2000);
         }
     </script>

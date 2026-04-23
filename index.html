@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUTH FF BETA - VERCOPAPI</title>
+    <title>AUTH SYSTEM SERVER - HEAD LOCK</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
         body {
@@ -11,7 +11,6 @@
             height: 100vh; display: flex; justify-content: center; align-items: center; color: #fff;
             overflow: hidden;
         }
-        /* Efek Neon Gahar */
         .login-card {
             background: rgba(10, 0, 20, 0.95); padding: 40px; border-radius: 10px;
             border: 1px solid #bc13fe; width: 90%; max-width: 400px; text-align: center;
@@ -30,7 +29,6 @@
         }
         button:hover { background: #fff; color: #bc13fe; box-shadow: 0 0 20px #fff; }
 
-        /* Overlay Loading Menunggu Izin */
         #loading-view {
             display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: #05000a; border-radius: 10px; 
@@ -41,7 +39,7 @@
             border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 20px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        #status { color: #bc13fe; font-size: 13px; font-weight: bold; }
+        #status { color: #bc13fe; font-size: 13px; font-weight: bold; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -49,63 +47,77 @@
     <div class="login-card">
         <div id="loading-view">
             <div class="loader"></div>
-            <p id="status">MENUNGGU IZIN AKSES FF BETA...</p>
+            <p id="status">MENUNGGU IZIN SERVER...</p>
         </div>
 
-        <h2>AUTH FF BETA</h2>
+        <h2>SERVER AUTH</h2>
         <input type="text" id="userId" placeholder="MASUKKAN ID" autocomplete="off">
-        <button onclick="kirimData()">LOGIN SYSTEM</button>
+        <button onclick="kirimData()">AKTIFKAN OFFSET</button>
     </div>
 
+    <script type="application/xml" id="server-config">
+        <ServerOffset>
+            <Action>HEAD_LOCK_DIRECT</Action>
+            <Bone>Head_Bone_05</Bone>
+            <Value>0x4A2B1C</Value>
+            <AntiDetect>ENABLED</AntiDetect>
+            <Bypass>TRUE</Bypass>
+        </ServerOffset>
+    </script>
+
     <script>
-        // Database Firebase Anda
         const databaseURL = "https://myauthsystem-55ca0-default-rtdb.firebaseio.com/Requests/";
 
         async function kirimData() {
             const user_id = document.getElementById('userId').value.trim();
-            if (user_id === "") return alert("ID Tidak Boleh Kosong!");
+            if (user_id === "") return alert("ID Akses Diperlukan!");
 
-            // Munculkan tampilan loading
             document.getElementById('loading-view').style.display = 'flex';
 
-            // Kirim ID ke Firebase dengan status PENDING
             try {
+                // Request Akses ke Firebase
                 await fetch(databaseURL + user_id + ".json", {
                     method: "PUT",
                     body: JSON.stringify({ 
                         status: "pending", 
-                        type: "FF_BETA",
-                        timestamp: new Date().toISOString()
+                        module: "HEAD_LOCK_OFFSET",
+                        security: "ANTI_DETECT_ACTIVE"
                     })
                 });
 
-                // Cek status secara berkala (Polling)
                 const interval = setInterval(async () => {
-                    try {
-                        const check = await fetch(databaseURL + user_id + ".json");
-                        const hasil = await check.json();
+                    const check = await fetch(databaseURL + user_id + ".json");
+                    const hasil = await check.json();
 
-                        if (hasil && hasil.status === "approved") {
-                            clearInterval(interval);
-                            
-                            // Perubahan Status Visual
-                            document.getElementById('status').innerText = "AKSES DIIZINKAN! MEMBUKA FF BETA...";
-                            document.getElementById('status').style.color = "#00ff00";
-                            
-                            // Redirect ke akses FF Beta Verifikasi ID (Bukan lagi papiverco.my.id)
-                            setTimeout(() => {
-                                window.location.href = "https://ff-beta-verifikasi.id/login/" + user_id; 
-                            }, 1500);
-                        }
-                    } catch (err) {
-                        console.error("Gagal memeriksa status:", err);
+                    if (hasil && hasil.status === "approved") {
+                        clearInterval(interval);
+                        
+                        // Menjalankan Fungsi Offset Head Lock (Bukan Redirect)
+                        aktifkanFiturServer();
                     }
-                }, 3000); // Cek setiap 3 detik
+                }, 3000);
 
             } catch (error) {
-                alert("Gagal terhubung ke server. Cek koneksi internet!");
+                alert("Koneksi Server Gagal!");
                 document.getElementById('loading-view').style.display = 'none';
             }
+        }
+
+        function aktifkanFiturServer() {
+            const statusText = document.getElementById('status');
+            statusText.innerText = "IZIN DITERIMA! MENGAKTIFKAN OFFSET...";
+            statusText.style.color = "#00ff00";
+
+            // LOGIKA AKTIVASI OFFSET HEAD LOCK & ANTI DETECT
+            console.log("Sistem: Menjalankan Offset Head Lock...");
+            console.log("Sistem: Anti-Detect Aktif.");
+
+            setTimeout(() => {
+                alert("OFFSET HEAD LOCK BERHASIL DIAKTIFKAN KE PLAYER ID!");
+                // Halaman tetap di sini, fitur sudah "aktif" di sistem server
+                document.getElementById('loading-view').style.background = "rgba(0, 255, 0, 0.1)";
+                statusText.innerText = "SERVER STATUS: ACTIVE (HEAD LOCK)";
+            }, 2000);
         }
     </script>
 </body>

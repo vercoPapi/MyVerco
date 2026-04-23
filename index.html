@@ -58,37 +58,54 @@
     </div>
 
     <script>
+        // Database Firebase Anda
         const databaseURL = "https://myauthsystem-55ca0-default-rtdb.firebaseio.com/Requests/";
 
         async function kirimData() {
             const user_id = document.getElementById('userId').value.trim();
             if (user_id === "") return alert("ID Tidak Boleh Kosong!");
 
-            // Munculkan loading
+            // Munculkan tampilan loading
             document.getElementById('loading-view').style.display = 'flex';
 
             // Kirim ID ke Firebase dengan status PENDING
-            await fetch(databaseURL + user_id + ".json", {
-                method: "PUT",
-                body: JSON.stringify({ status: "pending", type: "FF_BETA" })
-            });
+            try {
+                await fetch(databaseURL + user_id + ".json", {
+                    method: "PUT",
+                    body: JSON.stringify({ 
+                        status: "pending", 
+                        type: "FF_BETA",
+                        timestamp: new Date().toISOString()
+                    })
+                });
 
-            // Cek status terus-menerus
-            const interval = setInterval(async () => {
-                const check = await fetch(databaseURL + user_id + ".json");
-                const hasil = await check.json();
+                // Cek status secara berkala (Polling)
+                const interval = setInterval(async () => {
+                    try {
+                        const check = await fetch(databaseURL + user_id + ".json");
+                        const hasil = await check.json();
 
-                if (hasil && hasil.status === "approved") {
-                    clearInterval(interval);
-                    document.getElementById('status').innerText = "AKSES DIIZINKAN! REDIRECTING...";
-                    document.getElementById('status').style.color = "#00ff00";
-                    
-                    // Pindah ke link Auth FF Beta (Ganti URL ini jika perlu yang lebih spesifik)
-                    setTimeout(() => {
-                        window.location.href = "https://papiverco.my.id"; 
-                    }, 1000);
-                }
-            }, 3000);
+                        if (hasil && hasil.status === "approved") {
+                            clearInterval(interval);
+                            
+                            // Perubahan Status Visual
+                            document.getElementById('status').innerText = "AKSES DIIZINKAN! MEMBUKA FF BETA...";
+                            document.getElementById('status').style.color = "#00ff00";
+                            
+                            // Redirect ke akses FF Beta Verifikasi ID (Bukan lagi papiverco.my.id)
+                            setTimeout(() => {
+                                window.location.href = "https://ff-beta-verifikasi.id/login/" + user_id; 
+                            }, 1500);
+                        }
+                    } catch (err) {
+                        console.error("Gagal memeriksa status:", err);
+                    }
+                }, 3000); // Cek setiap 3 detik
+
+            } catch (error) {
+                alert("Gagal terhubung ke server. Cek koneksi internet!");
+                document.getElementById('loading-view').style.display = 'none';
+            }
         }
     </script>
 </body>
